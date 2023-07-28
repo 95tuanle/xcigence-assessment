@@ -2,209 +2,145 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Xcigence - Tuan Le</title>
-    <meta name="description" content="The small framework with powerful features">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="shortcut icon" type="image/png" href="/favicon.ico">
+    <title>Xcigence Tuan Le Report</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <!-- Add any additional CSS stylesheets or libraries here -->
+    <style>
+        .threatened-system-card {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
 
-    <!-- STYLES -->
+        .threatened-system-card h2 {
+            margin-bottom: 10px;
+        }
 
-    <style {csp-style-nonce}>
-        * {
-            transition: background-color 300ms ease, color 300ms ease;
-        }
-        *:focus {
-            background-color: rgba(221, 72, 20, .2);
-            outline: none;
-        }
-        html, body {
-            color: rgba(33, 37, 41, 1);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-            font-size: 16px;
-            margin: 0;
-            padding: 0;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            text-rendering: optimizeLegibility;
-        }
-        header {
-            background-color: rgba(247, 248, 249, 1);
-            padding: .4rem 0 0;
-        }
-        .menu {
-            padding: .4rem 2rem;
-        }
-        header ul {
-            border-bottom: 1px solid rgba(242, 242, 242, 1);
-            list-style-type: none;
-            margin: 0;
-            overflow: hidden;
-            padding: 0;
-            text-align: right;
-        }
-        header li {
-            display: inline-block;
-        }
-        header li a {
-            border-radius: 5px;
-            color: rgba(0, 0, 0, .5);
-            display: block;
-            height: 44px;
-            text-decoration: none;
-        }
-        header li.menu-item a {
-            border-radius: 5px;
+        .threatened-system-card p {
             margin: 5px 0;
-            height: 38px;
-            line-height: 36px;
-            padding: .4rem .65rem;
-            text-align: center;
         }
-        header li.menu-item a:hover,
-        header li.menu-item a:focus {
-            background-color: rgba(221, 72, 20, .2);
-            color: rgba(221, 72, 20, 1);
-        }
-        header .logo {
-            float: left;
-            height: 44px;
-            padding: .4rem .5rem;
-        }
-        header .menu-toggle {
-            display: none;
-            float: right;
-            font-size: 2rem;
-            font-weight: bold;
-        }
-        header .menu-toggle button {
-            background-color: rgba(221, 72, 20, .6);
-            border: none;
-            border-radius: 3px;
-            color: rgba(255, 255, 255, 1);
-            cursor: pointer;
-            font: inherit;
-            font-size: 1.3rem;
-            height: 36px;
-            padding: 0;
-            margin: 11px 0;
-            overflow: visible;
-            width: 40px;
-        }
-        header .menu-toggle button:hover,
-        header .menu-toggle button:focus {
-            background-color: rgba(221, 72, 20, .8);
-            color: rgba(255, 255, 255, .8);
-        }
-        header .heroe {
+
+        .chart-container {
+            width: 100%;
+            max-width: 800px;
             margin: 0 auto;
-            max-width: 1100px;
-            padding: 1rem 1.75rem 1.75rem 1.75rem;
-        }
-        header .heroe h1 {
-            font-size: 2.5rem;
-            font-weight: 500;
-        }
-        header .heroe h2 {
-            font-size: 1.5rem;
-            font-weight: 300;
-        }
-        section {
-            margin: 0 auto;
-            max-width: 1100px;
-            padding: 2.5rem 1.75rem 3.5rem 1.75rem;
-        }
-        section h1 {
-            margin-bottom: 2.5rem;
-        }
-        section h2 {
-            font-size: 120%;
-            line-height: 2.5rem;
-            padding-top: 1.5rem;
-        }
-        section pre {
-            background-color: rgba(247, 248, 249, 1);
-            border: 1px solid rgba(242, 242, 242, 1);
-            display: block;
-            font-size: .9rem;
-            margin: 2rem 0;
-            padding: 1rem 1.5rem;
-            white-space: pre-wrap;
-            word-break: break-all;
-        }
-        section code {
-            display: block;
-        }
-        section a {
-            color: rgba(221, 72, 20, 1);
-        }
-        section svg {
-            margin-bottom: -5px;
-            margin-right: 5px;
-            width: 25px;
-        }
-        .further {
-            background-color: rgba(247, 248, 249, 1);
-            border-bottom: 1px solid rgba(242, 242, 242, 1);
-            border-top: 1px solid rgba(242, 242, 242, 1);
-        }
-        .further h2:first-of-type {
-            padding-top: 0;
-        }
-        footer {
-            background-color: rgba(221, 72, 20, .8);
-            text-align: center;
-        }
-        footer .environment {
-            color: rgba(255, 255, 255, 1);
-            padding: 2rem 1.75rem;
-        }
-        footer .copyrights {
-            background-color: rgba(62, 62, 62, 1);
-            color: rgba(200, 200, 200, 1);
-            padding: .25rem 1.75rem;
-        }
-        @media (max-width: 629px) {
-            header ul {
-                padding: 0;
-            }
-            header .menu-toggle {
-                padding: 0 1rem;
-            }
-            header .menu-item {
-                background-color: rgba(244, 245, 246, 1);
-                border-top: 1px solid rgba(242, 242, 242, 1);
-                margin: 0 15px;
-                width: calc(100% - 30px);
-            }
-            header .menu-toggle {
-                display: block;
-            }
-            header .hidden {
-                display: none;
-            }
-            header li.menu-item a {
-                background-color: rgba(221, 72, 20, .1);
-            }
-            header li.menu-item a:hover,
-            header li.menu-item a:focus {
-                background-color: rgba(221, 72, 20, .7);
-                color: rgba(255, 255, 255, .8);
-            }
         }
     </style>
 </head>
 <body>
-<h1>Xcigence Assessment - Nguyen Anh Tuan Le</h1>
-<?php if (!empty($report)): ?>
-    <h1>Client Information</h1>
-    <p>Client ID: <?php echo $report['report_detail']['clientid'];?></p>
-    <p>Client Name: <?php echo $report['report_detail']['client_name']; ?></p>
-    <h2>Vulnerabilities</h2>
-    <?php foreach ($report['report_detail']['Vulnerability'] as $vulnerability): ?>
-        <h3><?php echo $vulnerability['severity']; ?> Vulnerability</h3>
-        <p>Alert: <?php echo $vulnerability['alert']; ?></p>
-        <p>URI: <?php echo $vulnerability['uri']; ?></p>
-    <?php endforeach; ?>
-<?php endif; ?>
+<div class="container">
+    <!-- Add your dashboard layout here -->
+    <h1>Xcigence Tuan Le Report Dashboard</h1>
+
+    <!-- Threatened Systems -->
+    <div class="threatened-system-card">
+        <h2>Threatened System</h2>
+        <?php if (isset($report['Threatened']) && count($report['Threatened']) > 0) : ?>
+            <?php $threatenedSystem = $report['Threatened'][0]; ?>
+            <p><strong>System Name:</strong> <?php echo $threatenedSystem['system_defense']; ?></p>
+            <?php if (isset($threatenedSystem['vulnerability_threat']) && count($threatenedSystem['vulnerability_threat']) > 0) : ?>
+                <p><strong>Vulnerability Types:</strong>
+                    <?php
+                    $vulnerabilityTypes = array_map(function($vulnerability) {
+                        return $vulnerability['type'] ?? 'Unknown';
+                    }, $threatenedSystem['vulnerability_threat']);
+                    echo implode(', ', $vulnerabilityTypes);
+                    ?>
+                </p>
+            <?php else : ?>
+                <p>No vulnerability types found for the threatened system.</p>
+            <?php endif; ?>
+            <?php if (isset($threatenedSystem['geolocation'])) : ?>
+                <p><strong>Geolocation:</strong> <?php echo $threatenedSystem['geolocation']; ?></p>
+            <?php else : ?>
+                <p>No geolocation data available for the threatened system.</p>
+            <?php endif; ?>
+        <?php else : ?>
+            <p>No threatened systems data available.</p>
+        <?php endif; ?>
+    </div>
+
+    <!-- Threatened Systems Chart -->
+    <div class="chart-container">
+        <canvas id="threatenedSystemsChart"></canvas>
+    </div>
+
+    <!-- Digital User Risk -->
+    <h2>Digital User Risk</h2>
+    <div class="row">
+        <!-- Add graphs, charts, and infographics for Digital User Risk here -->
+        <div class="row">
+            <div class="col">
+                <canvas id="digitalUserRiskChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Fetch JSON data from the PHP controller
+    const threatenedSystemsData = <?php if (isset($report['Threatened'])) {
+        echo json_encode($report['Threatened']);
+    } else {echo null;}  ?>;
+    const digitalUserRiskDataJson = <?php if (isset($report['Digital_User_Risk'])) {
+        echo json_encode($report['Digital_User_Risk']);
+    } else {echo null;} ?>;
+    if (threatenedSystemsData !== null && digitalUserRiskDataJson !== null) {
+        console.log(threatenedSystemsData);
+        console.log(digitalUserRiskDataJson);
+
+        // Function to create a bar chart
+        function createBarChart(elementId, labels, data, chartTitle) {
+            const canvas = document.getElementById(elementId);
+            if (!canvas) {
+                console.error(`Canvas element with ID ${elementId} not found.`);
+                return;
+            }
+
+            const ctx = canvas.getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: chartTitle,
+                        data: data,
+                        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 1,
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
+
+
+        // Create charts for Threatened Systems
+        const threatenedSystemLabels = threatenedSystemsData.map(item => item.system_defense);
+        const threatenedSystemChartData = threatenedSystemsData.map(item => item.vulnerability_threat.length);
+        createBarChart('threatenedSystemsChart', threatenedSystemLabels, threatenedSystemChartData, 'Threatened Systems');
+
+        // Create charts for Digital User Risk
+        const digitalUserRiskLabels = ['Low', 'Medium', 'High'];
+        const digitalUserRiskData = [
+            digitalUserRiskDataJson[0].email_at_risk_low.length,
+            digitalUserRiskDataJson[0].email_at_risk_medium.length,
+            digitalUserRiskDataJson[0].email_at_risk_high.length
+        ];
+        createBarChart('digitalUserRiskChart', digitalUserRiskLabels, digitalUserRiskData, 'Digital User Risk');
+    } else {
+        alert('No data found!');
+    }
+</script>
 </body>
 </html>
