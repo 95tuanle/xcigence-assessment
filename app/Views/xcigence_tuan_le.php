@@ -195,5 +195,16 @@
 </head>
 <body>
 <h1>Xcigence Assessment - Nguyen Anh Tuan Le</h1>
+<?php if (!empty($report)): ?>
+    <h1>Client Information</h1>
+    <p>Client ID: <?php echo $report['report_detail']['clientid'];?></p>
+    <p>Client Name: <?php echo $report['report_detail']['client_name']; ?></p>
+    <h2>Vulnerabilities</h2>
+    <?php foreach ($report['report_detail']['Vulnerability'] as $vulnerability): ?>
+        <h3><?php echo $vulnerability['severity']; ?> Vulnerability</h3>
+        <p>Alert: <?php echo $vulnerability['alert']; ?></p>
+        <p>URI: <?php echo $vulnerability['uri']; ?></p>
+    <?php endforeach; ?>
+<?php endif; ?>
 </body>
 </html>
