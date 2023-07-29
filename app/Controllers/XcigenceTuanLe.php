@@ -6,10 +6,13 @@ class XcigenceTuanLe extends BaseController
 {
     public function index(): string
     {
-        helper('file');
         $file = APPPATH . '../Task (1).json';
-        $data['report'] = json_decode(file_get_contents($file), true);
-//        print_r($data);
+        if (file_exists($file)) {
+            $jsonContents = file_get_contents($file);
+            $data['report'] = json_decode($jsonContents, true);
+        } else {
+            $data['report'] = null;
+        }
         return view('xcigence_tuan_le', $data);
     }
 }
