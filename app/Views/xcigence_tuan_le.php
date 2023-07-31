@@ -65,42 +65,28 @@
     const reportData = <?php if (isset($report)) {echo json_encode($report);} else {echo null;}?>;
     if (reportData !== null) {
         showHome();
-
         const sidebar = document.querySelector('.sidebar');
-        const mostRecentChildKeys = getMostRecentChildKeys(reportData);
-
+        let mostRecentChildKeys = [];
+        if (Array.isArray(reportData)) {
+            mostRecentChildKeys = data.map(item => item.name);
+        } else if (typeof reportData === 'object') {
+            mostRecentChildKeys = Object.keys(reportData)
+        }
         mostRecentChildKeys.forEach(key => {
             const button = document.createElement('button');
             button.className = 'btn btn-primary btn-block';
             button.innerText = formatKeyName(key);
-            button.onclick = (event) => showData(event, key);
+            button.onclick = (event) => showBasedOnChildClicked(event, key);
             sidebar.appendChild(button);
         });
-
         const signature = document.createElement('div');
         signature.className = 'signature';
         signature.innerText = new Date().getFullYear().toString() + ' Nguyen Anh Tuan Le';
         sidebar.appendChild(signature);
 
-        function getMostRecentChildKeys(data) {
-            let mostRecentChildren = [];
-            if (Array.isArray(data)) {
-                mostRecentChildren = data.map(item => item.name);
-            } else if (typeof data === 'object' && data !== null) {
-                mostRecentChildren = Object.keys(data)
-            }
-            return mostRecentChildren;
-        }
-
         function formatKeyName(key) {
             const words = key.split('_');
             return words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-        }
-
-        function showData(event, key) {
-            console.log(reportData[key]);
-            constructContent(formatKeyName(key), reportData[key]);
-            event.target.classList.add('active');
         }
 
         function showHome() {
@@ -108,8 +94,15 @@
             constructContent('Home', reportData)
         }
 
+        function showBasedOnChildClicked(event, key) {
+            console.log(reportData[key]);
+            constructContent(formatKeyName(key), reportData[key]);
+            event.target.classList.add('active');
+        }
+
         function constructContent(headerContent, dataContent) {
-            clearButtonsStyle();
+            const buttons = document.querySelectorAll('.sidebar button.btn');
+            buttons.forEach(button => button.classList.remove('active'));
             const header = document.getElementById('header');
             header.innerText = headerContent;
             const content = document.querySelector('.content pre');
@@ -120,9 +113,14 @@
                 case 'Report Detail':
                     content.innerHTML = reportDetailContent(dataContent);
                     break;
+                case 'Threatened':
+                    content.innerHTML = JSON.stringify(dataContent, null, 2);
+                    break;
+                case 'Digital User Risk':
+                    content.innerHTML = JSON.stringify(dataContent, null, 2);
+                    break;
                 default:
                     break;
-
             }
         }
 
@@ -188,11 +186,6 @@
                             <li><strong>Solution:</strong> ${dataContent["Vulnerability"][0]["solution"]}</li>
                         </ul>
                     </div>`;
-        }
-
-        function clearButtonsStyle() {
-            const buttons = document.querySelectorAll('.sidebar button.btn');
-            buttons.forEach(button => button.classList.remove('active'));
         }
     } else {
         alert('No data found!');
