@@ -68,7 +68,7 @@
         const sidebar = document.querySelector('.sidebar');
         let mostRecentChildKeys = [];
         if (Array.isArray(reportData)) {
-            mostRecentChildKeys = data.map(item => item.name);
+            mostRecentChildKeys = reportData.map(item => item.name);
         } else if (typeof reportData === 'object') {
             mostRecentChildKeys = Object.keys(reportData)
         }
@@ -114,14 +114,86 @@
                     content.innerHTML = reportDetailContent(dataContent);
                     break;
                 case 'Threatened':
-                    content.innerHTML = JSON.stringify(dataContent, null, 2);
+                    content.innerHTML = threatenedContent(dataContent);
                     break;
                 case 'Digital User Risk':
-                    content.innerHTML = JSON.stringify(dataContent, null, 2);
+                    content.innerHTML = digitalUserRiskContent(dataContent);
                     break;
                 default:
                     break;
             }
+        }
+
+        function threatenedContent(dataContent) {
+            if (Array.isArray(dataContent) && dataContent.length > 0) {
+                let contentHTML = '<ul>';
+
+                dataContent.forEach((threatenedItem, index) => {
+                    contentHTML += `<li><strong>Threat ${index + 1}:</strong><br>`;
+                    contentHTML += '<table class="table table-bordered">';
+                    for (const [key, value] of Object.entries(threatenedItem)) {
+                        if (Array.isArray(value)) {
+                            contentHTML += `
+            <tr>
+              <td><strong>${formatKeyName(key)}:</strong></td>
+              <td>
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      ${Object.keys(value[0])
+                                .map((innerKey) => `<th>${formatKeyName(innerKey)}</th>`)
+                                .join('')}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${value
+                                .map(
+                                    (item) =>
+                                        `<tr>${Object.values(item)
+                                            .map((innerValue) => `<td>${innerValue}</td>`)
+                                            .join('')}</tr>`
+                                )
+                                .join('')}
+                  </tbody>
+                </table>
+              </td>
+            </tr>`;
+                        } else if (typeof value === 'object') {
+                            contentHTML += `
+            <tr>
+              <td><strong>${formatKeyName(key)}:</strong></td>
+              <td>
+                <table class="table table-bordered">
+                  <tbody>
+                    ${Object.entries(value)
+                                .map(
+                                    ([innerKey, innerValue]) =>
+                                        `<tr><td><strong>${formatKeyName(innerKey)}</strong></td><td>${innerValue}</td></tr>`
+                                )
+                                .join('')}
+                  </tbody>
+                </table>
+              </td>
+            </tr>`;
+                        } else {
+                            contentHTML += `<tr><td><strong>${formatKeyName(key)}:</strong></td><td>${value}</td></tr>`;
+                        }
+                    }
+                    contentHTML += '</table>';
+                    contentHTML += '</li>';
+                });
+
+                contentHTML += '</ul>';
+                return contentHTML;
+            } else {
+                return '<p>No threatened data available.</p>';
+            }
+        }
+
+
+
+        function digitalUserRiskContent(dataContent) {
+            return `<div></div>`;
         }
 
         function reportDetailContent(dataContent) {
