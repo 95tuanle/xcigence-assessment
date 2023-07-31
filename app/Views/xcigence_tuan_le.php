@@ -10,6 +10,19 @@
             height: 100%;
             margin: 0;
         }
+        .content {
+            padding: 20px;
+            background-color: #f0f0f0;
+            flex: 1;
+            min-height: 0;
+        }
+        .header {
+            color: #192462;
+        }
+        pre {
+            overflow: auto;
+            max-height: 100%;
+        }
         .sidebar {
             background-color: #192462;
             color: #fff;
@@ -18,16 +31,6 @@
             display: flex;
             flex-direction: column;
             height: 100%;
-        }
-        .content {
-            padding: 20px;
-            background-color: #f0f0f0;
-            flex: 1;
-            min-height: 0;
-        }
-        pre {
-            overflow: auto;
-            max-height: 100%;
         }
         .sidebar button.btn {
             color: #B6BACF;
@@ -50,9 +53,10 @@
 <body>
 <div class="d-flex h-100">
     <div class="col-md-3 col-lg-2 sidebar">
-        <h1 onclick="showWholeData()">Xcigence</h1>
+        <h1 onclick="showHome()">Xcigence</h1>
     </div>
     <div class="col-md-9 col-lg-10 d-flex flex-column content">
+        <h2 id="header" class="header"></h2>
         <pre>
         </pre>
     </div>
@@ -61,7 +65,7 @@
 <script>
     const reportData = <?php if (isset($report)) {echo json_encode($report);} else {echo null;}?>;
     if (reportData !== null) {
-        showWholeData();
+        showHome();
 
         const sidebar = document.querySelector('.sidebar');
         const mostRecentChildKeys = getMostRecentChildKeys(reportData);
@@ -96,18 +100,21 @@
 
         function showData(event, key) {
             console.log(reportData[key]);
-            clearButtonsStyle();
+            constructContent(formatKeyName(key), reportData[key]);
             event.target.classList.add('active');
-
-            const content = document.querySelector('.content pre');
-            content.innerText = JSON.stringify(reportData[key], null, 2);
         }
 
-        function showWholeData() {
+        function showHome() {
             console.log(reportData);
+            constructContent('Home', reportData)
+        }
+
+        function constructContent(headerContent, dataContent) {
             clearButtonsStyle();
+            const header = document.getElementById('header');
+            header.innerText = headerContent;
             const content = document.querySelector('.content pre');
-            content.innerText = JSON.stringify(reportData, null, 2);
+            content.innerText = JSON.stringify(dataContent, null, 2);
         }
 
         function clearButtonsStyle() {
