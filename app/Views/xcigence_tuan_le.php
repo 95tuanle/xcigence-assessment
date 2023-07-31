@@ -15,6 +15,9 @@
             color: #fff;
             padding: 20px;
             box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
         }
         .content {
             padding: 20px;
@@ -26,6 +29,22 @@
             overflow: auto;
             max-height: 100%;
         }
+        .sidebar button.btn {
+            color: #B6BACF;
+            background-color: transparent;
+            border: 0;
+            text-align: left;
+        }
+        .sidebar button.btn.active {
+            color: #0D1B61;
+            background-color: #B6BACF;
+            border: 0;
+        }
+        .signature {
+            margin-top: auto;
+            font-size: 12px;
+            color: #B6BACF;
+        }
     </style>
 </head>
 <body>
@@ -33,24 +52,34 @@
     <div class="col-md-3 col-lg-2 sidebar">
         <h1>Xcigence</h1>
     </div>
-    <div class="col-md-9 col-lg-10 d-flex flex-column content"></div>
+    <div class="col-md-9 col-lg-10 d-flex flex-column content">
+        <pre>
+        </pre>
+    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const reportData = <?php if (isset($report)) {
-        echo json_encode($report);
-    } else {echo null;}  ?>;
+    const reportData = <?php if (isset($report)) {echo json_encode($report);} else {echo null;}?>;
     if (reportData !== null) {
         console.log(reportData);
-        const content = document.querySelector('.content');
-        const pre = document.createElement('pre');
-        pre.innerText = JSON.stringify(reportData, null, 2);
-        content.appendChild(pre);
+        const content = document.querySelector('.content pre');
+        content.innerText = JSON.stringify(reportData, null, 2);
 
         const sidebar = document.querySelector('.sidebar');
-
         const mostRecentChildKeys = getMostRecentChildKeys(reportData);
+
+        mostRecentChildKeys.forEach(key => {
+            const button = document.createElement('button');
+            button.className = 'btn btn-primary btn-block';
+            button.innerText = formatKeyName(key);
+            button.onclick = (event) => showData(event, key);
+            sidebar.appendChild(button);
+        });
+
+        const signature = document.createElement('div');
+        signature.className = 'signature';
+        signature.innerText = new Date().getFullYear().toString() + ' Nguyen Anh Tuan Le';
+        sidebar.appendChild(signature);
 
         function getMostRecentChildKeys(data) {
             let mostRecentChildren = [];
@@ -62,21 +91,16 @@
             return mostRecentChildren;
         }
 
-        mostRecentChildKeys.forEach(key => {
-            const button = document.createElement('button');
-            button.className = 'btn btn-primary btn-block';
-            button.innerText = formatKeyName(key);
-            button.onclick = () => showData(key);
-            sidebar.appendChild(button);
-        });
-
         function formatKeyName(key) {
             const words = key.split('_');
             return words.map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
         }
 
-        function showData(key) {
+        function showData(event, key) {
             console.log(`Show data for ${key}`);
+            const buttons = document.querySelectorAll('.sidebar button.btn');
+            buttons.forEach(button => button.classList.remove('active'));
+            event.target.classList.add('active');
         }
     } else {
         alert('No data found!');
