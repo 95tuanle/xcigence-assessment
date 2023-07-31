@@ -4,7 +4,7 @@ namespace App\Controllers;
 
 class XcigenceTuanLe extends BaseController
 {
-    public function index(): string
+    public function report(): string
     {
         $file = APPPATH . '../Task (1).json';
         if (file_exists($file)) {

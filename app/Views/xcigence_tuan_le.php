@@ -11,7 +11,7 @@
             margin: 0;
         }
         .sidebar {
-            background-color: #0D1B61;
+            background-color: #192462;
             color: #fff;
             padding: 20px;
             box-sizing: border-box;
@@ -36,8 +36,8 @@
             text-align: left;
         }
         .sidebar button.btn.active {
-            color: #0D1B61;
-            background-color: #B6BACF;
+            color: #192462;
+            background-color: #fff;
             border: 0;
         }
         .signature {
@@ -50,7 +50,7 @@
 <body>
 <div class="d-flex h-100">
     <div class="col-md-3 col-lg-2 sidebar">
-        <h1>Xcigence</h1>
+        <h1 onclick="showWholeData()">Xcigence</h1>
     </div>
     <div class="col-md-9 col-lg-10 d-flex flex-column content">
         <pre>
@@ -61,9 +61,7 @@
 <script>
     const reportData = <?php if (isset($report)) {echo json_encode($report);} else {echo null;}?>;
     if (reportData !== null) {
-        console.log(reportData);
-        const content = document.querySelector('.content pre');
-        content.innerText = JSON.stringify(reportData, null, 2);
+        showWholeData();
 
         const sidebar = document.querySelector('.sidebar');
         const mostRecentChildKeys = getMostRecentChildKeys(reportData);
@@ -97,10 +95,24 @@
         }
 
         function showData(event, key) {
-            console.log(`Show data for ${key}`);
+            console.log(reportData[key]);
+            clearButtonsStyle();
+            event.target.classList.add('active');
+
+            const content = document.querySelector('.content pre');
+            content.innerText = JSON.stringify(reportData[key], null, 2);
+        }
+
+        function showWholeData() {
+            console.log(reportData);
+            clearButtonsStyle();
+            const content = document.querySelector('.content pre');
+            content.innerText = JSON.stringify(reportData, null, 2);
+        }
+
+        function clearButtonsStyle() {
             const buttons = document.querySelectorAll('.sidebar button.btn');
             buttons.forEach(button => button.classList.remove('active'));
-            event.target.classList.add('active');
         }
     } else {
         alert('No data found!');
