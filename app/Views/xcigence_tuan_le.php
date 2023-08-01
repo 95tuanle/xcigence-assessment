@@ -4,25 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Xcigence - Tuan Le Report</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
     <style>
         body, html {
             height: 100%;
             margin: 0;
         }
+
         .content {
             padding: 20px;
             background-color: #f0f0f0;
             flex: 1;
             min-height: 0;
         }
+
         .header {
             color: #192462;
         }
+
         pre {
             white-space: pre-wrap;
             max-height: 100%;
         }
+
         .sidebar {
             background-color: #192462;
             color: #fff;
@@ -32,22 +37,26 @@
             flex-direction: column;
             height: 100%;
         }
+
         .sidebar button.btn {
             color: #B6BACF;
             background-color: transparent;
             border: 0;
             text-align: left;
         }
+
         .sidebar button.btn.active {
             color: #192462;
             background-color: #fff;
             border: 0;
         }
+
         .signature {
             margin-top: auto;
             font-size: 12px;
             color: #B6BACF;
         }
+
         li {
             overflow: auto;
         }
@@ -65,10 +74,16 @@
         <pre></pre>
     </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const reportData = <?php if (isset($report)) {echo json_encode($report);} else {echo null;}?>;
+        const reportData = <?php if (isset($report)) {
+            echo json_encode($report);
+        } else {
+            echo null;
+        }?>;
         if (reportData !== null) {
             function formatKeyName(key) {
                 return key.split('_').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
@@ -120,29 +135,29 @@
                         for (const [key, value] of Object.entries(threatenedItem)) {
                             if (Array.isArray(value)) {
                                 contentHTML += `<tr>
-                                                <td><strong>${formatKeyName(key)}:</strong></td>
-                                                <td>
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                            <tr>${Object.keys(value[0]).map((innerKey) => `<th>${formatKeyName(innerKey)}</th>`).join('')}</tr>
-                                                        </thead>
-                                                        <tbody>
-                                                            ${value.map((item) =>`<tr>${Object.values(item).map((innerValue) => `<td>${innerValue}</td>`).join('')}</tr>`).join('')}
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>`;
+                                                    <td><strong>${formatKeyName(key)}:</strong></td>
+                                                    <td>
+                                                        <table class="table table-bordered">
+                                                            <thead>
+                                                                <tr>${Object.keys(value[0]).map((innerKey) => `<th>${formatKeyName(innerKey)}</th>`).join('')}</tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                ${value.map((item) => `<tr>${Object.values(item).map((innerValue) => `<td>${innerValue}</td>`).join('')}</tr>`).join('')}
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>`;
                             } else if (typeof value === 'object') {
                                 contentHTML += `<tr>
-                                                <td><strong>${formatKeyName(key)}:</strong></td>
-                                                <td>
-                                                    <table class="table table-bordered">
-                                                        <tbody>
-                                                            ${Object.entries(value).map(([innerKey, innerValue]) => `<tr><td><strong>${formatKeyName(innerKey)}</strong></td><td>${innerValue}</td></tr>`).join('')}
-                                                        </tbody>
-                                                    </table>
-                                                </td>
-                                            </tr>`;
+                                                    <td><strong>${formatKeyName(key)}:</strong></td>
+                                                    <td>
+                                                        <table class="table table-bordered">
+                                                            <tbody>
+                                                                ${Object.entries(value).map(([innerKey, innerValue]) => `<tr><td><strong>${formatKeyName(innerKey)}</strong></td><td>${innerValue}</td></tr>`).join('')}
+                                                            </tbody>
+                                                        </table>
+                                                    </td>
+                                                </tr>`;
                             } else {
                                 contentHTML += `<tr><td><strong>${formatKeyName(key)}:</strong></td><td>${value}</td></tr>`;
                             }
