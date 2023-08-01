@@ -77,6 +77,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', () => {
         const reportData = <?php if (isset($report)) {
@@ -104,32 +105,32 @@
                 event.target.classList.add('active');
             }
 
-            function constructContent(headerContent, dataContent) {
+            function constructContent(headerContent, contentData) {
                 const header = document.getElementById('header');
                 header.innerText = headerContent;
                 const content = document.querySelector('.content pre');
                 switch (headerContent) {
                     case 'Home':
-                        content.innerHTML = JSON.stringify(dataContent, null, 2);
+                        content.innerHTML = JSON.stringify(contentData, null, 2);
                         break;
                     case 'Report Detail':
-                        content.innerHTML = reportDetailContent(dataContent);
+                        content.innerHTML = reportDetailContent(contentData);
                         break;
                     case 'Threatened':
-                        content.innerHTML = threatenedContent(dataContent);
+                        content.innerHTML = threatenedContent(contentData);
                         break;
                     case 'Digital User Risk':
-                        content.innerHTML = digitalUserRiskContent(dataContent);
+                        content.innerHTML = digitalUserRiskContent(contentData);
                         break;
                     default:
                         break;
                 }
             }
 
-            function threatenedContent(dataContent) {
-                if (Array.isArray(dataContent) && dataContent.length > 0) {
+            function threatenedContent(contentData) {
+                if (Array.isArray(contentData) && contentData.length > 0) {
                     let contentHTML = '<ul>';
-                    dataContent.forEach((threatenedItem, index) => {
+                    contentData.forEach((threatenedItem, index) => {
                         contentHTML += `<li><strong>Threat ${index + 1}:</strong><br>`;
                         contentHTML += '<table class="table table-bordered">';
                         for (const [key, value] of Object.entries(threatenedItem)) {
@@ -172,9 +173,9 @@
                 }
             }
 
-            function digitalUserRiskContent(dataContent) {
-                if (Array.isArray(dataContent) && dataContent.length > 0) {
-                    const riskItem = dataContent[0]; // Assuming there is only one risk item in the array
+            function digitalUserRiskContent(contentData) {
+                if (Array.isArray(contentData) && contentData.length > 0) {
+                    const riskItem = contentData[0]; // Assuming there is only one risk item in the array
                     return `<h4>Email At Risk Low</h4>
                         ${generateEmailList(riskItem["email_at_risk_low"])}
                         <h4>Email At Risk Medium</h4>
@@ -220,66 +221,66 @@
                 }
             }
 
-            function reportDetailContent(dataContent) {
+            function reportDetailContent(contentData) {
                 return `<div>
                         <table class="table table-bordered">
                             <tr>
                                 <td><strong>Client ID:</strong></td>
-                                <td>${dataContent["clientid"]}</td>
+                                <td>${contentData["clientid"]}</td>
                             </tr>
                             <tr>
                                 <td><strong>Scan ID:</strong></td>
-                                <td>${dataContent["scan_id"]}</td>
+                                <td>${contentData["scan_id"]}</td>
                             </tr>
                             <tr>
                                 <td><strong>Client Name:</strong></td>
-                                <td>${dataContent["client_name"]}</td>
+                                <td>${contentData["client_name"]}</td>
                             </tr>
                             <tr>
                                 <td><strong>Client Email:</strong></td>
-                                <td>${dataContent["client_email"]}</td>
+                                <td>${contentData["client_email"]}</td>
                             </tr>
                             <tr>
                                 <td><strong>Client Industry:</strong></td>
-                                <td>${dataContent["client_industry"]}</td>
+                                <td>${contentData["client_industry"]}</td>
                             </tr>
                             <tr>
                                 <td><strong>Client Web/IP:</strong></td>
-                                <td><a href="${dataContent["client_web_ip"]}">${dataContent["client_web_ip"]}</a></td>
+                                <td><a href="${contentData["client_web_ip"]}">${contentData["client_web_ip"]}</a></td>
                             </tr>
                             <tr>
                                 <td><strong>Final Score:</strong></td>
-                                <td>${dataContent["final_score"]}</td>
+                                <td>${contentData["final_score"]}</td>
                             </tr>
                             <tr>
                                 <td><strong>Status:</strong></td>
-                                <td>${dataContent["status"]}</td>
+                                <td>${contentData["status"]}</td>
                             </tr>
                             <tr>
                                 <td><strong>Low Vulnerabilities:</strong></td>
-                                <td>${dataContent["Low_vuln"]}</td>
+                                <td>${contentData["Low_vuln"]}</td>
                             </tr>
                             <tr>
                                 <td><strong>Medium Vulnerabilities:</strong></td>
-                                <td>${dataContent["Medium_vuln"]}</td>
+                                <td>${contentData["Medium_vuln"]}</td>
                             </tr>
                             <tr>
                                 <td><strong>High Vulnerabilities:</strong></td>
-                                <td>${dataContent["High_vuln"]}</td>
+                                <td>${contentData["High_vuln"]}</td>
                             </tr>
                             <tr>
                                 <td><strong>Critical Vulnerabilities:</strong></td>
-                                <td>${dataContent["Critical_vuln"]}</td>
+                                <td>${contentData["Critical_vuln"]}</td>
                             </tr>
                         </table>
                         <h4>Vulnerability Details</h4>
                         <ul>
-                            <li><strong>Alert:</strong> ${dataContent["Vulnerability"][0].alert}</li>
-                            <li><strong>CVE:</strong> ${dataContent["Vulnerability"][0]["CVE"]}</li>
-                            <li><strong>Severity:</strong> ${dataContent["Vulnerability"][0]["severity"]}</li>
-                            <li><strong>URI:</strong> <a href="${dataContent["Vulnerability"][0]["uri"]}">${dataContent["Vulnerability"][0]["uri"]}</a></li>
-                            <li><strong>Description:</strong> ${dataContent["Vulnerability"][0]["description"]}</li>
-                            <li><strong>Solution:</strong> ${dataContent["Vulnerability"][0]["solution"]}</li>
+                            <li><strong>Alert:</strong> ${contentData["Vulnerability"][0].alert}</li>
+                            <li><strong>CVE:</strong> ${contentData["Vulnerability"][0]["CVE"]}</li>
+                            <li><strong>Severity:</strong> ${contentData["Vulnerability"][0]["severity"]}</li>
+                            <li><strong>URI:</strong> <a href="${contentData["Vulnerability"][0]["uri"]}">${contentData["Vulnerability"][0]["uri"]}</a></li>
+                            <li><strong>Description:</strong> ${contentData["Vulnerability"][0]["description"]}</li>
+                            <li><strong>Solution:</strong> ${contentData["Vulnerability"][0]["solution"]}</li>
                         </ul>
                     </div>`;
             }
