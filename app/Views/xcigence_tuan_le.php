@@ -111,7 +111,7 @@
                 const content = document.querySelector('.content pre');
                 switch (headerContent) {
                     case 'Home':
-                        content.innerHTML = JSON.stringify(contentData, null, 2);
+                        content.innerHTML = `<h2>Report Detail</h2><br>${reportDetailContent(contentData['report_detail'])}<br><h2>Digital User Risk</h2><br>${digitalUserRiskContent(contentData['Digital_User_Risk'])}<br><h2>Threatened</h2><br>${threatenedContent(contentData['Threatened'])}`;
                         break;
                     case 'Report Detail':
                         content.innerHTML = reportDetailContent(contentData);
