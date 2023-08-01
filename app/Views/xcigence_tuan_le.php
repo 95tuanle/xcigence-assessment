@@ -174,7 +174,51 @@
         }
 
         function digitalUserRiskContent(dataContent) {
-            return `<div></div>`;
+            if (Array.isArray(dataContent) && dataContent.length > 0) {
+                const riskItem = dataContent[0]; // Assuming there is only one risk item in the array
+                return `<h4>Email At Risk Low</h4>
+                        ${generateEmailList(riskItem["email_at_risk_low"])}
+                        <h4>Email At Risk Medium</h4>
+                        ${generateEmailList(riskItem["email_at_risk_medium"])}
+                        <h4>Email At Risk High</h4>
+                        ${generateEmailList(riskItem["email_at_risk_high"])}
+                        <h4>Email Risks</h4>
+                        <p>${riskItem["email_risks"]}</p>
+                        <h4>Email Risks Solution</h4>
+                        <p>${riskItem["email_risks_solution"]}</p>
+                        <h4>Hacked Email Addresses</h4>
+                        ${generateHackedEmailAddresses(riskItem["hacked_email_address"]["hacked_email_address"])}
+                        <h4>Hacked Email Addresses Solution</h4>
+                        <p>${riskItem["hacked_email_address"]["hacked_email_address_solution"]}</p>`;
+            } else {
+                return '<p>No Digital User Risk data available.</p>';
+            }
+        }
+
+        function generateEmailList(emails) {
+            if (Array.isArray(emails) && emails.length > 0) {
+                let emailListHTML = '<ul>';
+                emails.forEach((email) => {
+                    emailListHTML += `<li>${email}</li>`;
+                });
+                emailListHTML += '</ul>';
+                return emailListHTML;
+            } else {
+                return '<p>No email data available.</p>';
+            }
+        }
+
+        function generateHackedEmailAddresses(hackedEmails) {
+            if (Array.isArray(hackedEmails) && hackedEmails.length > 0) {
+                let hackedEmailsHTML = '<ul>';
+                hackedEmails.forEach((hackedEmail) => {
+                    hackedEmailsHTML += `<li>${hackedEmail}</li>`;
+                });
+                hackedEmailsHTML += '</ul>';
+                return hackedEmailsHTML;
+            } else {
+                return '<p>No hacked email addresses available.</p>';
+            }
         }
 
         function reportDetailContent(dataContent) {
