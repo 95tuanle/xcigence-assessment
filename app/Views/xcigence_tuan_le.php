@@ -115,6 +115,7 @@
                     case 'Home':
                         content.innerHTML = `<h2>Report Detail</h2><br>${reportDetailContent(contentData['report_detail'])}<br><h2>Digital User Risk</h2><br>${digitalUserRiskContent(contentData['Digital_User_Risk'])}<br><h2>Threatened</h2><br>${threatenedContent(contentData['Threatened'])}`;
                         generateThreatenedCharts(contentData['Threatened']);
+                        generateDigitalUserRiskCharts(contentData['Digital_User_Risk']);
                         break;
                     case 'Report Detail':
                         content.innerHTML = reportDetailContent(contentData);
@@ -125,6 +126,7 @@
                         break;
                     case 'Digital User Risk':
                         content.innerHTML = digitalUserRiskContent(contentData);
+                        generateDigitalUserRiskCharts(contentData);
                         break;
                     default:
                         break;
@@ -138,6 +140,14 @@
                         contentHTML += `<li><strong>Threat ${index + 1}:</strong><br>`;
                         contentHTML += '<table class="table table-bordered">';
                         for (const [key, value] of Object.entries(threatenedItem)) {
+                            if (key === "vulnerability_threat") {
+                                contentHTML += '<h3>Vulnerabilities and Attack Complexity</h3>';
+                                contentHTML += `<canvas id="vulnerabilitiesComplexity-${index}" width="400" height="200"></canvas>`;
+                                contentHTML += '<h3>Vulnerability Impact on Confidentiality</h3>';
+                                contentHTML += `<canvas id="confidentialityImpact-${index}" width="400" height="200"></canvas>`;
+                                contentHTML += '<h3>Geolocation of Potential Attacks</h3>';
+                                contentHTML += `<div id="map" style="height: 400px;"></div>`;
+                            }
                             if (Array.isArray(value)) {
                                 contentHTML += `<tr>
                                                     <td><strong>${formatKeyName(key)}:</strong></td>
@@ -165,14 +175,6 @@
                                                 </tr>`;
                             } else {
                                 contentHTML += `<tr><td><strong>${formatKeyName(key)}:</strong></td><td>${value}</td></tr>`;
-                            }
-                            if (key === "vulnerability_threat") {
-                                contentHTML += '<h3>Vulnerabilities and Attack Complexity</h3>';
-                                contentHTML += `<canvas id="vulnerabilitiesComplexity-${index}" width="400" height="200"></canvas>`;
-                                contentHTML += '<h3>Vulnerability Impact on Confidentiality</h3>';
-                                contentHTML += `<canvas id="confidentialityImpact-${index}" width="400" height="200"></canvas>`;
-                                contentHTML += '<h3>Geolocation of Potential Attacks</h3>';
-                                contentHTML += `<div id="map" style="height: 400px;"></div>`;
                             }
                         }
                         contentHTML += '</table>';
@@ -336,11 +338,62 @@
                         <h4>Hacked Email Addresses</h4>
                         ${generateHackedEmailAddresses(riskItem["hacked_email_address"]["hacked_email_address"])}
                         <h4>Hacked Email Addresses Solution</h4>
-                        <p>${riskItem["hacked_email_address"]["hacked_email_address_solution"]}</p>`;
+                        <p>${riskItem["hacked_email_address"]["hacked_email_address_solution"]}</p>
+                        <h3>Digital User Risk</h3>
+                        <canvas id="digital-user-risk-chart"></canvas>`;
                 } else {
                     return '<p>No Digital User Risk data available.</p>';
                 }
             }
+            
+            function generateDigitalUserRiskCharts(contentData) {
+                if (Array.isArray(contentData) && contentData.length > 0) {
+                    const riskItem = contentData[0];
+
+                    const lowRiskCount = riskItem["email_at_risk_low"].length;
+                    const mediumRiskCount = riskItem["email_at_risk_medium"].length;
+                    const highRiskCount = riskItem["email_at_risk_high"].length;
+
+                    const chartData = {
+                        labels: ['Low Risk', 'Medium Risk', 'High Risk'],
+                        datasets: [{
+                            data: [lowRiskCount, mediumRiskCount, highRiskCount],
+                            backgroundColor: ['rgba(75, 192, 192, 0.7)', 'rgba(255, 205, 86, 0.7)', 'rgba(255, 99, 132, 0.7)'],
+                            label: 'Emails at Risk',
+                        }],
+                    };
+
+                    generateBarChart('digital-user-risk-chart', chartData);
+                }
+            }
+
+            function generateBarChart(canvasId, data) {
+                const ctx = document.getElementById(canvasId).getContext('2d');
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: data,
+                    options: {
+                        responsive: true,
+                        legend: {
+                            display: true,
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                                ticks: {
+                                    autoSkip: false
+                                },
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true,
+                            },
+                        },
+                    },
+                });
+            }
+
 
             function generateEmailList(emails) {
                 if (Array.isArray(emails) && emails.length > 0) {
