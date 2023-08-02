@@ -112,12 +112,14 @@
                 switch (headerContent) {
                     case 'Home':
                         content.innerHTML = `<h2>Report Detail</h2><br>${reportDetailContent(contentData['report_detail'])}<br><h2>Digital User Risk</h2><br>${digitalUserRiskContent(contentData['Digital_User_Risk'])}<br><h2>Threatened</h2><br>${threatenedContent(contentData['Threatened'])}`;
+                        generateThreatenedCharts(contentData['Threatened']);
                         break;
                     case 'Report Detail':
                         content.innerHTML = reportDetailContent(contentData);
                         break;
                     case 'Threatened':
                         content.innerHTML = threatenedContent(contentData);
+                        generateThreatenedCharts(contentData);
                         break;
                     case 'Digital User Risk':
                         content.innerHTML = digitalUserRiskContent(contentData);
@@ -162,6 +164,12 @@
                             } else {
                                 contentHTML += `<tr><td><strong>${formatKeyName(key)}:</strong></td><td>${value}</td></tr>`;
                             }
+                            if (key === "vulnerability_threat") {
+                                contentHTML += '<h3>Vulnerabilities and Attack Complexity</h3>';
+                                contentHTML += `<canvas id="vulnerabilitiesComplexity-${index}" width="400" height="200"></canvas>`;
+                                contentHTML += '<h3>Vulnerability Impact on Confidentiality</h3>';
+                                contentHTML += `<canvas id="confidentialityImpact-${index}" width="400" height="200"></canvas>`;
+                            }
                         }
                         contentHTML += '</table>';
                         contentHTML += '</li>';
@@ -171,6 +179,90 @@
                 } else {
                     return '<p>No threatened data available.</p>';
                 }
+            }
+
+            function generateThreatenedCharts(contentData) {
+                if (Array.isArray(contentData) && contentData.length > 0) {
+                    contentData.forEach((threatenedItem, index) => {
+                        for (const [key, value] of Object.entries(threatenedItem)) {
+                            if (key === "vulnerability_threat") {
+                                const { complexity, confidentiality } = value.reduce((acc, data) => {
+                                    const complexity = data["threat_attackcomplexity"];
+                                    const confidentiality = data['threat_confidentialityimpact'];
+                                    acc.complexity[complexity] = (acc.complexity[complexity] || 0) + 1;
+                                    acc.confidentiality[confidentiality] = (acc.confidentiality[confidentiality] || 0) + 1;
+                                    return acc;
+                                }, { complexity: {}, confidentiality: {} });
+
+                                const vulnerabilitiesComplexityConfig = generateBarChartConfig(`vulnerabilitiesComplexity-${index}`, complexity);
+                                new Chart(document.getElementById(`vulnerabilitiesComplexity-${index}`).getContext('2d'), vulnerabilitiesComplexityConfig);
+
+                                const confidentialityImpactConfig = generatePieChartConfig(`confidentialityImpact-${index}`, confidentiality);
+                                new Chart(document.getElementById(`confidentialityImpact-${index}`).getContext('2d'), confidentialityImpactConfig);
+                            }
+                        }
+                    });
+                }
+            }
+
+            function generateBarChartConfig(canvasId, complexityData) {
+                const attackComplexityLabels = ["Low", "Medium", "High"];
+                const vulnerabilitiesCount = attackComplexityLabels.map(complexity => complexityData[complexity] || 0);
+
+                return {
+                    type: 'bar',
+                    data: {
+                        labels: attackComplexityLabels,
+                        datasets: [{
+                            data: vulnerabilitiesCount,
+                            backgroundColor: ["rgba(75, 192, 192, 0.7)", "rgba(255, 205, 86, 0.7)", "rgba(255, 99, 132, 0.7)"],
+                            label: "Vulnerabilities",
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        legend: {
+                            display: false,
+                        },
+                        title: {
+                            display: true,
+                            text: 'Vulnerabilities by Attack Complexity',
+                        },
+                        scales: {
+                            x: {
+                                stacked: true,
+                            },
+                            y: {
+                                stacked: true,
+                                beginAtZero: true,
+                            },
+                        },
+                    },
+                };
+            }
+
+            function generatePieChartConfig(canvasId, confidentialityData) {
+                const confidentialityLabels = Object.keys(confidentialityData);
+                const confidentialityCount = confidentialityLabels.map(label => confidentialityData[label]);
+
+                return {
+                    type: 'pie',
+                    data: {
+                        labels: confidentialityLabels,
+                        datasets: [{
+                            data: confidentialityCount,
+                            backgroundColor: ['rgba(75, 192, 192, 0.7)', 'rgba(255, 205, 86, 0.7)', 'rgba(255, 99, 132, 0.7)'],
+                            label: 'Vulnerability Impact',
+                        }],
+                    },
+                    options: {
+                        responsive: true,
+                        title: {
+                            display: true,
+                            text: 'Vulnerability Impact on Confidentiality',
+                        },
+                    },
+                };
             }
 
             function digitalUserRiskContent(contentData) {
