@@ -34,18 +34,6 @@
                     "threat_attackcomplexity": "Low",
                     "threat_confidentialityimpact": "High",
                     "threat_geolocation": "RU"
-                }, {
-                    "threat": "wp_cron is Enable",
-                    "threat_description": "The wp-cron.php file is responsible for scheduled events in a WordPress website. By default, when a request is made, WordPress will generate an additional request from it to the wp-cron.php file. By generating a large number of requests to the website, it is therefore possible to make the site perform a DoS attack on itself.",
-                    "threat_attackcomplexity": "Medium",
-                    "threat_confidentialityimpact": "Low",
-                    "threat_geolocation": "RU"
-                }, {
-                    "threat": "wp_cron is Enable",
-                    "threat_description": "The wp-cron.php file is responsible for scheduled events in a WordPress website. By default, when a request is made, WordPress will generate an additional request from it to the wp-cron.php file. By generating a large number of requests to the website, it is therefore possible to make the site perform a DoS attack on itself.",
-                    "threat_attackcomplexity": "High",
-                    "threat_confidentialityimpact": "Medium",
-                    "threat_geolocation": "RU"
                 }
             ],
             "Malicious_IP_Address_threat": {
