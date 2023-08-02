@@ -6,6 +6,8 @@
     <title>Xcigence - Tuan Le Report</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <style>
         body, html {
             height: 100%;
@@ -169,6 +171,8 @@
                                 contentHTML += `<canvas id="vulnerabilitiesComplexity-${index}" width="400" height="200"></canvas>`;
                                 contentHTML += '<h3>Vulnerability Impact on Confidentiality</h3>';
                                 contentHTML += `<canvas id="confidentialityImpact-${index}" width="400" height="200"></canvas>`;
+                                contentHTML += '<h3>Geolocation of Potential Attacks</h3>';
+                                contentHTML += `<div id="map" style="height: 400px;"></div>`;
                             }
                         }
                         contentHTML += '</table>';
@@ -199,6 +203,57 @@
 
                                 const confidentialityImpactConfig = generatePieChartConfig(`confidentialityImpact-${index}`, confidentiality);
                                 new Chart(document.getElementById(`confidentialityImpact-${index}`).getContext('2d'), confidentialityImpactConfig);
+
+                                const map = L.map("map").setView([0, 0], 1);
+
+                                L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+
+                                function getCountryName(countryCode) {
+                                    const countries = {
+                                        "RU": "Russia",
+                                        "CN": "China",
+                                        "US": "United States",
+                                        "NL": "Netherlands",
+                                        "DE": "Germany",
+                                        "FR": "France",
+                                        "GB": "United Kingdom",
+                                        "IN": "India",
+                                        "KR": "South Korea",
+                                        "TR": "Turkey",
+                                        "BR": "Brazil",
+                                        "PL": "Poland",
+                                        "IT": "Italy",
+                                        "ES": "Spain",
+                                        "UA": "Ukraine",
+                                        "CA": "Canada",
+                                        "TW": "Taiwan",
+                                        "JP": "Japan",
+                                        "CZ": "Czech Republic",
+                                        "SE": "Sweden",
+                                        "CH": "Switzerland",
+                                        "HK": "Hong Kong",
+                                        "AT": "Austria",
+                                        "BE": "Belgium"
+                                    };
+                                    return countries[countryCode] || "Unknown";
+                                }
+
+                                value.forEach((attack) => {
+                                    const countryCode = attack["threat_geolocation"];
+                                    const countryName = getCountryName(countryCode);
+                                    if (countryName !== "Unknown") {
+                                        const marker = L.marker([0, 0]).addTo(map);
+                                        fetch(`https://nominatim.openstreetmap.org/search?q=${countryName}&format=json`)
+                                            .then((response) => response.json())
+                                            .then((data) => {
+                                                if (data.length > 0) {
+                                                    const { lat, lon } = data[0];
+                                                    marker.setLatLng([lat, lon]);
+                                                    marker.bindPopup(`Country: ${countryName}<br>Latitude: ${lat}<br>Longitude: ${lon}`);
+                                                }
+                                            });
+                                    }
+                                });
                             }
                         }
                     });
@@ -267,7 +322,7 @@
 
             function digitalUserRiskContent(contentData) {
                 if (Array.isArray(contentData) && contentData.length > 0) {
-                    const riskItem = contentData[0]; // Assuming there is only one risk item in the array
+                    const riskItem = contentData[0];
                     return `<h4>Email At Risk Low</h4>
                         ${generateEmailList(riskItem["email_at_risk_low"])}
                         <h4>Email At Risk Medium</h4>
