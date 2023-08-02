@@ -325,22 +325,22 @@
             function digitalUserRiskContent(contentData) {
                 if (Array.isArray(contentData) && contentData.length > 0) {
                     const riskItem = contentData[0];
-                    return `<h4>Email At Risk Low</h4>
-                        ${generateEmailList(riskItem["email_at_risk_low"])}
-                        <h4>Email At Risk Medium</h4>
-                        ${generateEmailList(riskItem["email_at_risk_medium"])}
-                        <h4>Email At Risk High</h4>
-                        ${generateEmailList(riskItem["email_at_risk_high"])}
-                        <h4>Email Risks</h4>
-                        <p>${riskItem["email_risks"]}</p>
-                        <h4>Email Risks Solution</h4>
-                        <p>${riskItem["email_risks_solution"]}</p>
-                        <h4>Hacked Email Addresses</h4>
-                        ${generateHackedEmailAddresses(riskItem["hacked_email_address"]["hacked_email_address"])}
-                        <h4>Hacked Email Addresses Solution</h4>
-                        <p>${riskItem["hacked_email_address"]["hacked_email_address_solution"]}</p>
-                        <h3>Digital User Risk</h3>
-                        <canvas id="digital-user-risk-chart"></canvas>`;
+                    return `<h3>Digital User Risk</h3>
+                            <canvas id="digital-user-risk-chart"></canvas>
+                            <h4>Email At Risk Low</h4>
+                            ${generateEmailList(riskItem["email_at_risk_low"])}
+                            <h4>Email At Risk Medium</h4>
+                            ${generateEmailList(riskItem["email_at_risk_medium"])}
+                            <h4>Email At Risk High</h4>
+                            ${generateEmailList(riskItem["email_at_risk_high"])}
+                            <h4>Email Risks</h4>
+                            <p>${riskItem["email_risks"]}</p>
+                            <h4>Email Risks Solution</h4>
+                            <p>${riskItem["email_risks_solution"]}</p>
+                            <h4>Hacked Email Addresses</h4>
+                            ${generateHackedEmailAddresses(riskItem["hacked_email_address"]["hacked_email_address"])}
+                            <h4>Hacked Email Addresses Solution</h4>
+                            <p>${riskItem["hacked_email_address"]["hacked_email_address_solution"]}</p>`;
                 } else {
                     return '<p>No Digital User Risk data available.</p>';
                 }
