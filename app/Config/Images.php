@@ -25,7 +25,7 @@ class Images extends BaseConfig
      * @var array<string, string>
      */
     public array $handlers = [
-        'gd'      => GDHandler::class,
+        'gd' => GDHandler::class,
         'imagick' => ImageMagickHandler::class,
     ];
 }

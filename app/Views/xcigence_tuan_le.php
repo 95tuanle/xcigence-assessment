@@ -6,7 +6,7 @@
     <title>Xcigence - Tuan Le Report</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"/>
     <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
     <style>
         body, html {
@@ -192,13 +192,13 @@
                     contentData.forEach((threatenedItem, index) => {
                         for (const [key, value] of Object.entries(threatenedItem)) {
                             if (key === "vulnerability_threat") {
-                                const { complexity, confidentiality } = value.reduce((acc, data) => {
+                                const {complexity, confidentiality} = value.reduce((acc, data) => {
                                     const complexity = data["threat_attackcomplexity"];
                                     const confidentiality = data['threat_confidentialityimpact'];
                                     acc.complexity[complexity] = (acc.complexity[complexity] || 0) + 1;
                                     acc.confidentiality[confidentiality] = (acc.confidentiality[confidentiality] || 0) + 1;
                                     return acc;
-                                }, { complexity: {}, confidentiality: {} });
+                                }, {complexity: {}, confidentiality: {}});
 
                                 const vulnerabilitiesComplexityConfig = generateBarChartConfig(`vulnerabilitiesComplexity-${index}`, complexity);
                                 new Chart(document.getElementById(`vulnerabilitiesComplexity-${index}`).getContext('2d'), vulnerabilitiesComplexityConfig);
@@ -249,7 +249,7 @@
                                             .then((response) => response.json())
                                             .then((data) => {
                                                 if (data.length > 0) {
-                                                    const { lat, lon } = data[0];
+                                                    const {lat, lon} = data[0];
                                                     marker.setLatLng([lat, lon]);
                                                     marker.bindPopup(`Country: ${countryName}<br>Latitude: ${lat}<br>Longitude: ${lon}`);
                                                 }
@@ -345,7 +345,7 @@
                     return '<p>No Digital User Risk data available.</p>';
                 }
             }
-            
+
             function generateDigitalUserRiskCharts(contentData) {
                 if (Array.isArray(contentData) && contentData.length > 0) {
                     const riskItem = contentData[0];

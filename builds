@@ -15,7 +15,7 @@ define('GITHUB_URL', 'https://github.com/codeigniter4/codeigniter4');
  */
 
 // Determine the requested stability
-if (empty($argv[1]) || ! in_array($argv[1], ['release', 'development'], true)) {
+if (empty($argv[1]) || !in_array($argv[1], ['release', 'development'], true)) {
     echo 'Usage: php builds [release|development]' . PHP_EOL;
 
     exit;
@@ -32,13 +32,13 @@ $file = __DIR__ . DIRECTORY_SEPARATOR . 'composer.json';
 if (is_file($file)) {
     $contents = file_get_contents($file);
 
-    if ((string) $contents !== '') {
+    if ((string)$contents !== '') {
         $array = json_decode($contents, true);
 
         if (is_array($array)) {
             if ($dev) {
                 $array['minimum-stability'] = 'dev';
-                $array['prefer-stable']     = true;
+                $array['prefer-stable'] = true;
                 $array['repositories'] ??= [];
 
                 $found = false;
@@ -50,10 +50,10 @@ if (is_file($file)) {
                     }
                 }
 
-                if (! $found) {
+                if (!$found) {
                     $array['repositories'][] = [
                         'type' => 'vcs',
-                        'url'  => GITHUB_URL,
+                        'url' => GITHUB_URL,
                     ];
                 }
 
