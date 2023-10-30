@@ -85,7 +85,7 @@
             <?= nl2br(esc($message)) ?>
         <?php else : ?>
             <?= lang('Errors.sorryCannotFind') ?>
-        <?php endif ?>
+        <?php endif; ?>
     </p>
 </div>
 </body>
